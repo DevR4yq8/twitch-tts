@@ -56,28 +56,7 @@ Ten tryb eliminuje potrzebę konfiguracji wirtualnych kabli audio (np. Virtual A
 ### Biblioteki (pip)
 Aby program działał poprawnie, należy zainstalować następujące biblioteki Pythona za pomocą `pip`. Otwórz terminal lub wiersz poleceń i wykonaj:
 
-**Wymagane podstawowe:**
-```bash
-pip install pyttsx3
-```
-
-**Zalecane dla lepszych głosów i odtwarzania (mocno rekomendowane):**
-```bash
-pip install edge-tts pygame
-```
-
-- `edge-tts`: Dla wysokiej jakości głosów Microsoft Neural.
-- `pygame`: Używane do odtwarzania plików audio generowanych przez edge-tts i gTTS.
-
-**Opcjonalne (jeśli chcesz używać głosów Google):**
-```bash
-pip install gTTS
-```
-
-**Pełna instalacja zalecanych i opcjonalnych bibliotek:**
-```bash
-pip install pyttsx3 edge-tts pygame gTTS
-```
+`pip install pyttsx3 edge-tts pygame`
 
 ## 4. Uruchamianie Programu
 
