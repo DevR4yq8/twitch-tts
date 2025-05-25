@@ -1,215 +1,236 @@
 ![](https://i.imgur.com/NEVwXnd.png)
 
-# Twitch TTS Bot (Tryb Prosty) - Dokumentacja
+# Twitch TTS Bot (Simple Mode) - Documentation
 
-## Spis Treści
-1. [Wprowadzenie](#wprowadzenie)
-2. [Funkcje](#funkcje)
-3. [Wymagania Systemowe i Instalacja](#wymagania-systemowe-i-instalacja)
+## Table of Contents
+1. [Introduction](#introduction)
+2. [Features](#features)
+3. [System Requirements and Installation](#system-requirements-and-installation)
    - [Python](#python)
-   - [Biblioteki (pip)](#biblioteki-pip)
-4. [Uruchamianie Programu](#uruchamianie-programu)
-5. [Interfejs Użytkownika (GUI)](#interfejs-użytkownika-gui)
-   - [Sekcja Połączenia](#sekcja-połączenia)
-   - [Sekcja Ustawień TTS](#sekcja-ustawień-tts)
-   - [Informacja o Trybie](#informacja-o-trybie)
-   - [Sekcja Czatu](#sekcja-czatu)
-   - [Pasek Statusu](#pasek-statusu)
-6. [Jak Działa TTS na Streamie?](#jak-działa-tts-na-streamie)
-7. [Wybór Głosów](#wybór-głosów)
-8. [Zapisywanie Ustawień](#zapisywanie-ustawień)
-9. [Struktura Kodu (Ogólny Zarys)](#struktura-kodu-ogólny-zarys)
-   - [Główne Moduły](#główne-moduły)
-   - [Klasa `TwitchTTSBot`](#klasa-twitchttsbot)
-10. [Rozwiązywanie Problemów](#rozwiązywanie-problemów)
-11. [Możliwe Rozszerzenia](#możliwe-rozszerzenia)
+   - [Libraries (pip)](#libraries-pip)
+4. [Running the Program](#running-the-program)
+5. [User Interface (GUI)](#user-interface-gui)
+   - [Connection Section](#connection-section)
+   - [TTS Settings Section](#tts-settings-section)
+   - [Mode Information](#mode-information)
+   - [Chat Section](#chat-section)
+   - [Status Bar](#status-bar)
+6. [How Does TTS Work on Stream?](#how-does-tts-work-on-stream)
+7. [Voice Selection](#voice-selection)
+8. [Saving Settings](#saving-settings)
+9. [Code Structure (General Overview)](#code-structure-general-overview)
+   - [Main Modules](#main-modules)
+   - [Class `TwitchTTSBot`](#class-twitchttsbot)
+10. [Troubleshooting](#troubleshooting)
+11. [Possible Extensions](#possible-extensions)
 
 ---
 
-## 1. Wprowadzenie
+## 1. Introduction
 
-**Twitch TTS Bot (Tryb Prosty)** to aplikacja napisana w Pythonie, która łączy się z czatem Twitch i odczytuje wiadomości na głos przy użyciu syntezy mowy (Text-To-Speech, TTS). Została zaprojektowana z myślą o prostocie: TTS jest odtwarzany na domyślnym urządzeniu audio streamera, co pozwala widzom słyszeć go, jeśli streamer przechwytuje dźwięk z pulpitu w swoim oprogramowaniu do streamowania (np. OBS Studio, Streamlabs).
+**Twitch TTS Bot (Simple Mode)** is a Python application that connects to Twitch chat and reads messages aloud using Text-To-Speech (TTS) synthesis. It's designed with simplicity in mind: TTS is played on the streamer's default audio device, allowing viewers to hear it if the streamer captures desktop audio in their streaming software (e.g., OBS Studio, Streamlabs).
 
-Ten tryb eliminuje potrzebę konfiguracji wirtualnych kabli audio (np. Virtual Audio Cable).
+This mode eliminates the need to configure virtual audio cables (e.g., Virtual Audio Cable).
 
-## 2. Funkcje
+## 2. Features
 
-- **Połączenie z czatem Twitch:** Łączy się z wybranym kanałem Twitch jako anonimowy użytkownik.
-- **Odczytywanie wiadomości:** Przetwarza wiadomości z czatu i odczytuje je na głos.
-- **Wybór silnika TTS i głosu:**
-  - Obsługa systemowych głosów TTS przez `pyttsx3`.
-  - Obsługa wysokiej jakości głosów Microsoft Neural (np. Zofia, Marek) przez `edge-tts`.
-  - Opcjonalna obsługa głosów Google przez `gTTS`.
-- **Konfiguracja TTS:** Możliwość dostosowania szybkości mowy i głośności TTS.
-- **Czytanie nicków:** Opcja włączenia/wyłączenia odczytywania nazwy użytkownika przed wiadomością.
-- **Interfejs graficzny (GUI):** Prosty i intuicyjny interfejs oparty na `tkinter` do zarządzania połączeniem i ustawieniami.
-- **Wyświetlanie czatu:** Wbudowane okno czatu pokazujące przychodzące wiadomości.
-- **Tryb testowy:** Możliwość wpisania własnego tekstu i przetestowania działania TTS.
-- **Zapisywanie ustawień:** Ustawienia użytkownika (kanał, głos, szybkość, głośność) są zapisywane w pliku `tts_settings_simple.json` i automatycznie wczytywane przy ponownym uruchomieniu.
-- **Czyszczenie wiadomości:** Usuwanie linków i emotikon Twitcha przed przekazaniem tekstu do silnika TTS.
+- **Twitch chat connection:** Connects to a selected Twitch channel as an anonymous user.
+- **Message reading:** Processes chat messages and reads them aloud.
+- **TTS engine and voice selection:**
+  - Support for system TTS voices through `pyttsx3`.
+  - Support for high-quality Microsoft Neural voices (e.g., Zofia, Marek) through `edge-tts`.
+  - Optional support for Google voices through `gTTS`.
+- **TTS configuration:** Ability to adjust speech speed and TTS volume.
+- **Reading nicknames:** Option to enable/disable reading the username before the message.
+- **Graphical interface (GUI):** Simple and intuitive interface based on `tkinter` for managing connection and settings.
+- **Chat display:** Built-in chat window showing incoming messages.
+- **Test mode:** Ability to type your own text and test TTS functionality.
+- **Settings saving:** User settings (channel, voice, speed, volume) are saved in `tts_settings_simple.json` file and automatically loaded on restart.
+- **Message cleaning:** Removes links and Twitch emotes before passing text to the TTS engine.
 
-## 3. Wymagania Systemowe i Instalacja
+## 3. System Requirements and Installation
 
 ### Python
-- Python 3.8 lub nowszy.
+- Python 3.8 or newer.
 
-### Biblioteki (pip)
-Aby program działał poprawnie, należy zainstalować następujące biblioteki Pythona za pomocą `pip`. Otwórz terminal lub wiersz poleceń i wykonaj:
+### Libraries (pip)
+To make the program work correctly, you need to install the following Python libraries using `pip`. Open terminal or command prompt and execute:
 
-`pip install pyttsx3 edge-tts pygame`
+**Required basic:**
+```bash
+pip install pyttsx3
+```
 
-## 4. Uruchamianie Programu
+**Recommended for better voices and playback (highly recommended):**
+```bash
+pip install edge-tts pygame
+```
 
-1. Upewnij się, że masz zainstalowany Python i wszystkie wymagane biblioteki (patrz sekcja Instalacja).
-2. Zapisz kod programu jako plik `.py` (np. `twitch_tts.py`).
-3. Otwórz terminal lub wiersz poleceń w folderze, w którym zapisałeś plik.
-4. Uruchom program komendą:
+- `edge-tts`: For high-quality Microsoft Neural voices.
+- `pygame`: Used for playing audio files generated by edge-tts and gTTS.
+
+**Optional (if you want to use Google voices):**
+```bash
+pip install gTTS
+```
+
+**Full installation of recommended and optional libraries:**
+```bash
+pip install pyttsx3 edge-tts pygame gTTS
+```
+
+## 4. Running the Program
+
+1. Make sure you have Python and all required libraries installed (see Installation section).
+2. Save the program code as a `.py` file (e.g., `twitch_tts.py`).
+3. Open terminal or command prompt in the folder where you saved the file.
+4. Run the program with the command:
 
 ```bash
 python twitch_tts.py
 ```
 
-lub (jeśli używasz konkretnej wersji Pythona lub Python Launcher w Windows):
+or (if using a specific Python version or Python Launcher on Windows):
 
 ```bash
 py twitch_tts.py
 ```
 
-lub np.:
+or e.g.:
 
 ```bash
 python3.11 twitch_tts.py
 ```
 
-## 5. Interfejs Użytkownika (GUI)
+## 5. User Interface (GUI)
 
-Po uruchomieniu programu pojawi się główne okno aplikacji z kilkoma sekcjami:
+After running the program, the main application window will appear with several sections:
 
-### Sekcja Połączenia
+### Connection Section
 
-- **Kanał Twitch:** Pole tekstowe, w którym należy wpisać nazwę kanału Twitch, z którym chcesz się połączyć (np. `nazwa_twojego_kanalu`).
-- **Połącz/Rozłącz:** Przycisk do nawiązywania i przerywania połączenia z czatem Twitch.
-- **Wyczyść chat:** Przycisk do wyczyszczenia zawartości okna czatu w aplikacji.
+- **Twitch Channel:** Text field where you should enter the name of the Twitch channel you want to connect to (e.g., `your_channel_name`).
+- **Connect/Disconnect:** Button for establishing and terminating connection to Twitch chat.
+- **Clear Chat:** Button to clear the contents of the chat window in the application.
 
-### Sekcja Ustawień TTS
+### TTS Settings Section
 
-- **Głos:** Rozwijana lista (Combobox) pozwalająca wybrać dostępny głos TTS. Głosy są pobierane z systemu (pyttsx3), Microsoft (edge-tts) oraz opcjonalnie Google (gTTS).
-- **Szybkość mowy:** Suwak do regulacji szybkości, z jaką odczytywane są wiadomości.
-- **Głośność TTS:** Suwak do regulacji głośności syntezatora mowy. Ta głośność będzie słyszalna zarówno dla streamera, jak i (pośrednio) dla widzów.
-- **Czytaj nazwy użytkowników:** Pole wyboru (Checkbox) decydujące, czy przed każdą wiadomością ma być odczytana nazwa użytkownika, który ją wysłał (np. "Użytkownik123 mówi: Cześć!").
-- **Testuj Głos:** Przycisk do odtworzenia przykładowej frazy wybranym głosem i ustawieniami.
-- **Tryb Testowy (wpisz wiadomość):** Przycisk, który po kliknięciu wyświetla poniżej okna czatu dodatkowe pole. Umożliwia ono wpisanie własnego tekstu, który po naciśnięciu "Mów" lub Enter zostanie przetworzony przez TTS.
+- **Voice:** Dropdown list (Combobox) allowing you to select available TTS voice. Voices are retrieved from system (pyttsx3), Microsoft (edge-tts) and optionally Google (gTTS).
+- **Speech Speed:** Slider to adjust the speed at which messages are read.
+- **TTS Volume:** Slider to adjust the volume of the speech synthesizer. This volume will be audible to both the streamer and (indirectly) to viewers.
+- **Read Usernames:** Checkbox deciding whether the username of the sender should be read before each message (e.g., "User123 says: Hello!").
+- **Test Voice:** Button to play a sample phrase with the selected voice and settings.
+- **Test Mode (type message):** Button that, when clicked, displays an additional field below the chat window. It allows typing your own text which will be processed by TTS after pressing "Speak" or Enter.
 
-### Informacja o Trybie
+### Mode Information
 
-Ta sekcja wyświetla stałą informację przypominającą, że TTS jest odtwarzany na domyślnym urządzeniu audio i aby był słyszalny na streamie, oprogramowanie do streamowania musi przechwytywać dźwięk z pulpitu.
+This section displays constant information reminding that TTS is played on the default audio device and for it to be audible on stream, streaming software must capture desktop audio.
 
-### Sekcja Czatu
+### Chat Section
 
-- **Okno czatu:** Duże pole tekstowe (ScrolledText), w którym wyświetlane są wiadomości przychodzące z czatu Twitch.
-- **Pole testowe (ukryte domyślnie):** Po kliknięciu "Tryb Testowy", pod oknem czatu pojawia się pole do wprowadzania tekstu i przycisk "Mów" do testowania TTS.
+- **Chat Window:** Large text field (ScrolledText) where incoming messages from Twitch chat are displayed.
+- **Test Field (hidden by default):** After clicking "Test Mode", a field for entering text and a "Speak" button for testing TTS appears below the chat window.
 
-### Pasek Statusu
+### Status Bar
 
-Na samym dole okna znajduje się pasek statusu, który wyświetla aktualny stan połączenia (np. "Nie połączono", "Połączono z #kanał", "Błąd połączenia").
+At the bottom of the window there's a status bar that displays the current connection state (e.g., "Not connected", "Connected to #channel", "Connection error").
 
-## 6. Jak Działa TTS na Streamie?
+## 6. How Does TTS Work on Stream?
 
-W tym "Trybie Prostym":
+In this "Simple Mode":
 
-1. Aplikacja Twitch TTS Bot odtwarza dźwięk syntezatora mowy na domyślnym urządzeniu wyjściowym audio Twojego komputera (np. na słuchawkach lub głośnikach, których używasz).
-2. Ty (streamer) słyszysz TTS bezpośrednio z tego urządzenia.
-3. Twoje oprogramowanie do streamowania (np. OBS Studio, Streamlabs) musi być skonfigurowane tak, aby przechwytywało dźwięk z pulpitu (często nazywane "Desktop Audio" lub "Dźwięk systemowy").
-4. Ponieważ TTS jest częścią dźwięku z pulpitu, widzowie również go usłyszą razem z innymi dźwiękami z Twojego komputera (np. dźwiękiem z gry, muzyką).
+1. The Twitch TTS Bot application plays speech synthesizer audio on your computer's default audio output device (e.g., on headphones or speakers you're using).
+2. You (the streamer) hear the TTS directly from this device.
+3. Your streaming software (e.g., OBS Studio, Streamlabs) must be configured to capture desktop audio (often called "Desktop Audio" or "System Audio").
+4. Since TTS is part of desktop audio, viewers will also hear it along with other sounds from your computer (e.g., game audio, music).
 
-**Zalety:**
-- Prosta konfiguracja, nie wymaga dodatkowego oprogramowania (jak Virtual Audio Cable).
+**Advantages:**
+- Simple setup, doesn't require additional software (like Virtual Audio Cable).
 
-**Wady:**
-- Brak możliwości niezależnej regulacji głośności TTS dla widzów z poziomu aplikacji bota (głośność dla widzów zależy od głośności TTS w bocie oraz od ustawień źródła "Dźwięk z pulpitu" w OBS).
-- TTS jest zmiksowany z innymi dźwiękami pulpitu.
+**Disadvantages:**
+- No ability to independently adjust TTS volume for viewers from the bot application (viewer volume depends on TTS volume in the bot and desktop audio source settings in OBS).
+- TTS is mixed with other desktop sounds.
 
-## 7. Wybór Głosów
+## 7. Voice Selection
 
-Program automatycznie wykrywa dostępne głosy:
+The program automatically detects available voices:
 
-- **Systemowe (pyttsx3):** Głosy zainstalowane w Twoim systemie operacyjnym. Ich jakość i dostępność (w tym polskie) mogą się różnić.
-- **Microsoft Neural (edge-tts):** Wysokiej jakości głosy, w tym bardzo dobre polskie (Zofia, Marek, Agnieszka). Zalecane dla najlepszej jakości. Wymagają zainstalowanej biblioteki `edge-tts` i `pygame`.
-- **Google (gTTS):** Głosy od Google. Wymagają zainstalowanej biblioteki `gTTS` i `pygame`.
+- **System (pyttsx3):** Voices installed in your operating system. Their quality and availability (including Polish ones) may vary.
+- **Microsoft Neural (edge-tts):** High-quality voices, including very good Polish ones (Zofia, Marek, Agnieszka). Recommended for best quality. Require installed `edge-tts` and `pygame` libraries.
+- **Google (gTTS):** Google voices. Require installed `gTTS` and `pygame` libraries.
 
-Głosy można wybrać z rozwijanej listy w sekcji "Ustawienia TTS".
+Voices can be selected from the dropdown list in the "TTS Settings" section.
 
-## 8. Zapisywanie Ustawień
+## 8. Saving Settings
 
-Po zmianie ustawień (takich jak wybrany kanał, głos, szybkość mowy, głośność) i udanym połączeniu z kanałem, ustawienia są automatycznie zapisywane do pliku `tts_settings_simple.json` w tym samym folderze co program. Przy następnym uruchomieniu programu, te ustawienia zostaną automatycznie wczytane.
+After changing settings (such as selected channel, voice, speech speed, volume) and successful connection to the channel, settings are automatically saved to the `tts_settings_simple.json` file in the same folder as the program. On the next program startup, these settings will be automatically loaded.
 
-## 9. Struktura Kodu (Ogólny Zarys)
+## 9. Code Structure (General Overview)
 
-### Główne Moduły
+### Main Modules
 
-Program wykorzystuje standardowe moduły Pythona oraz biblioteki zewnętrzne:
+The program uses standard Python modules and external libraries:
 
-- `socket`: Do komunikacji sieciowej z serwerem IRC Twitcha.
-- `threading`: Do obsługi operacji sieciowych i TTS w osobnych wątkach, aby nie blokować interfejsu GUI.
-- `time`: Do obsługi opóźnień.
-- `pyttsx3`, `edge_tts`, `gTTS`: Silniki syntezy mowy.
-- `pygame`: Do odtwarzania plików audio generowanych przez edge-tts i gTTS.
-- `re`: Do wyrażeń regularnych (np. czyszczenie wiadomości).
-- `queue`: Do bezpiecznego przekazywania wiadomości między wątkami (kolejka TTS).
-- `tkinter`: Do tworzenia interfejsu graficznego.
-- `json`: Do zapisywania i wczytywania ustawień.
-- `os`: Do operacji na systemie plików (np. sprawdzanie istnienia pliku ustawień).
-- `sys`: Do interakcji z interpreterem Pythona.
-- `asyncio`: Używane wewnętrznie przez edge-tts.
+- `socket`: For network communication with Twitch IRC server.
+- `threading`: For handling network operations and TTS in separate threads to avoid blocking the GUI.
+- `time`: For handling delays.
+- `pyttsx3`, `edge_tts`, `gTTS`: Speech synthesis engines.
+- `pygame`: For playing audio files generated by edge-tts and gTTS.
+- `re`: For regular expressions (e.g., message cleaning).
+- `queue`: For safe message passing between threads (TTS queue).
+- `tkinter`: For creating the graphical interface.
+- `json`: For saving and loading settings.
+- `os`: For file system operations (e.g., checking settings file existence).
+- `sys`: For interacting with the Python interpreter.
+- `asyncio`: Used internally by edge-tts.
 
-### Klasa `TwitchTTSBot`
+### Class `TwitchTTSBot`
 
-Główna logika programu jest zamknięta w klasie `TwitchTTSBot`. Najważniejsze metody:
+The main program logic is enclosed in the `TwitchTTSBot` class. Most important methods:
 
-- `__init__(self)`: Konstruktor, inicjalizuje zmienne, silniki TTS, GUI, wczytuje ustawienia.
-- `setup_tts(self)`: Konfiguruje dostępne głosy.
-- `setup_gui(self)`: Tworzy wszystkie elementy interfejsu graficznego.
-- `connect_to_twitch(self)`: Nawiązuje połączenie z serwerem IRC Twitcha.
-- `listen_to_chat(self)`: Wątek nasłuchujący wiadomości z czatu.
-- `add_to_chat(self, username, message)`: Dodaje wiadomość do GUI i kolejki TTS.
-- `_process_tts_text(self, text)`: Wybiera odpowiedni silnik TTS i odczytuje tekst.
-- `tts_worker(self)`: Wątek przetwarzający kolejkę wiadomości do odczytania.
-- `speak_with_pyttsx3(self, text)`, `speak_with_edge_tts(self, text, voice_id)`, `speak_with_gtts(self, text)`: Metody specyficzne dla każdego silnika TTS.
-- `play_audio_file_pygame(self, audio_file, volume, is_temp_file)`: Odtwarza plik audio za pomocą pygame.
-- `save_settings(self)`, `load_settings(self)`, `apply_settings(self)`: Zarządzanie ustawieniami.
-- Metody obsługi zdarzeń GUI (np. kliknięcia przycisków, zmiany wartości suwaków).
-- `run(self)`: Uruchamia główną pętlę aplikacji tkinter.
-- `on_closing(self)`: Obsługa zamknięcia okna aplikacji.
+- `__init__(self)`: Constructor, initializes variables, TTS engines, GUI, loads settings.
+- `setup_tts(self)`: Configures available voices.
+- `setup_gui(self)`: Creates all graphical interface elements.
+- `connect_to_twitch(self)`: Establishes connection to Twitch IRC server.
+- `listen_to_chat(self)`: Thread listening to chat messages.
+- `add_to_chat(self, username, message)`: Adds message to GUI and TTS queue.
+- `_process_tts_text(self, text)`: Selects appropriate TTS engine and reads text.
+- `tts_worker(self)`: Thread processing queue of messages to read.
+- `speak_with_pyttsx3(self, text)`, `speak_with_edge_tts(self, text, voice_id)`, `speak_with_gtts(self, text)`: Methods specific to each TTS engine.
+- `play_audio_file_pygame(self, audio_file, volume, is_temp_file)`: Plays audio file using pygame.
+- `save_settings(self)`, `load_settings(self)`, `apply_settings(self)`: Settings management.
+- GUI event handling methods (e.g., button clicks, slider value changes).
+- `run(self)`: Runs the main tkinter application loop.
+- `on_closing(self)`: Handles application window closing.
 
-## 10. Rozwiązywanie Problemów
+## 10. Troubleshooting
 
-**ModuleNotFoundError:** Oznacza brak wymaganej biblioteki. Zainstaluj ją używając `pip install <nazwa_biblioteki>`.
+**ModuleNotFoundError:** Indicates missing required library. Install it using `pip install <library_name>`.
 
-**Brak polskich głosów / niska jakość głosu:**
-- Upewnij się, że masz zainstalowane `edge-tts` i `pygame`.
-- Wybierz głos z dopiskiem "(Microsoft Neural)" z listy głosów (np. Zofia, Marek).
-- Sprawdź, czy w Twoim systemie są zainstalowane polskie pakiety językowe i głosy systemowe.
+**No Polish voices / low voice quality:**
+- Make sure you have `edge-tts` and `pygame` installed.
+- Select a voice with "(Microsoft Neural)" notation from the voice list (e.g., Zofia, Marek).
+- Check if Polish language packs and system voices are installed in your system.
 
-**TTS nie działa / brak dźwięku:**
-- Sprawdź, czy głośność TTS w aplikacji nie jest ustawiona na 0.
-- Upewnij się, że domyślne urządzenie audio w systemie działa poprawnie i nie jest wyciszone.
-- Jeśli używasz edge-tts lub gTTS, sprawdź, czy pygame.mixer inicjuje się poprawnie (komunikaty w konsoli przy starcie programu mogą pomóc). Błędy inicjalizacji pygame.mixer często wskazują na problemy z konfiguracją SDL lub sterownikami audio.
-- Sprawdź komunikaty błędów w konsoli, z której uruchomiłeś program.
+**TTS not working / no sound:**
+- Check if TTS volume in the application is not set to 0.
+- Make sure the default audio device in the system works properly and is not muted.
+- If using edge-tts or gTTS, check if pygame.mixer initializes correctly (console messages at program startup can help). pygame.mixer initialization errors often indicate problems with SDL configuration or audio drivers.
+- Check error messages in the console from which you ran the program.
 
-**Program się nie łączy z Twitchem:**
-- Sprawdź poprawność nazwy kanału Twitch.
-- Upewnij się, że masz połączenie z internetem.
-- Sprawdź, czy zapora sieciowa nie blokuje połączenia.
+**Program doesn't connect to Twitch:**
+- Check the correctness of the Twitch channel name.
+- Make sure you have internet connection.
+- Check if firewall is not blocking the connection.
 
-**AttributeError: type object 'Queue' has no attribute 'Empty':** Upewnij się, że wyjątek Empty jest poprawnie importowany z modułu queue (`from queue import Queue, Empty as QueueEmpty`) i używany w blokach try-except (`except QueueEmpty:`).
+**AttributeError: type object 'Queue' has no attribute 'Empty':** Make sure the Empty exception is correctly imported from the queue module (`from queue import Queue, Empty as QueueEmpty`) and used in try-except blocks (`except QueueEmpty:`).
 
-**Ostrzeżenie DeprecationWarning: There is no current event loop (asyncio):** Zwykle nie jest to krytyczny błąd, ale wskazuje na starszy sposób użycia `asyncio.get_event_loop()`. Kod próbuje sobie z tym radzić.
+**DeprecationWarning: There is no current event loop (asyncio):** Usually not a critical error, but indicates older way of using `asyncio.get_event_loop()`. The code tries to handle this.
 
-## 11. Możliwe Rozszerzenia
+## 11. Possible Extensions
 
-- Dodanie obsługi tokenu OAuth dla logowania jako konkretny użytkownik (umożliwiłoby to np. wysyłanie wiadomości przez bota).
-- Filtrowanie wiadomości (np. blokowanie określonych słów, ignorowanie komend botów).
-- Kolejkowanie TTS z priorytetami (np. dla subskrybentów).
-- Integracja z systemem punktów kanału Twitch.
-- Bardziej zaawansowane opcje czyszczenia wiadomości (np. usuwanie powtórzeń znaków).
-- Wprowadzenie ponownie "Trybu Zaawansowanego" z obsługą Virtual Audio Cable dla bardziej precyzyjnej kontroli dźwięku.
+- Adding OAuth token support for logging in as a specific user (would enable e.g., sending messages through the bot).
+- Message filtering (e.g., blocking specific words, ignoring bot commands).
+- TTS queuing with priorities (e.g., for subscribers).
+- Integration with Twitch channel points system.
+- More advanced message cleaning options (e.g., removing character repetitions).
+- Reintroducing "Advanced Mode" with Virtual Audio Cable support for more precise audio control.
